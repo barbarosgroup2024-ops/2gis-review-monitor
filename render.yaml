@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: 2gis-review-monitor
+    env: node
+    region: frankfurt
+    plan: free
+    buildCommand: npm install && cd client && npm install && npm run build
+    startCommand: node server/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: ADMIN_TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: ADMIN_TELEGRAM_CHAT_ID
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: REVIEW_CHECK_SCHEDULE
+        value: "*/5 * * * *"
+      - key: GOOGLE_SHEETS_ENABLED
+        value: false
