@@ -1,0 +1,44 @@
+# ============================================================
+# ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ДЛЯ RAILWAY
+# ============================================================
+# Скопируйте эти переменные в Railway:
+# 1. Откройте ваш проект на railway.app
+# 2. Нажмите на сервис → Variables → Raw Editor
+# 3. Вставьте содержимое ниже
+# ============================================================
+
+NODE_ENV=production
+PORT=3000
+
+# JWT Secret (для авторизации пользователей)
+JWT_SECRET=2gis_reviews_super_secret_key_change_this_12345678
+
+# Supabase Configuration
+SUPABASE_URL=https://fxjgmulnkiolxgsrfmry.supabase.co
+SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4amdtdWxua2lvbHhnc3JmbXJ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTY2MTEwNCwiZXhwIjoyMDc1MjM3MTA0fQ.EWbmp8Yb3BFPHKqxQqSzjX7lV7VPxrcM7U6bTBuk6jU
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4amdtdWxua2lvbHhnc3JmbXJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NjExMDQsImV4cCI6MjA3NTIzNzEwNH0.D0lQFJSaVOT8DZkAKtUyVupcFopCrovJC5QUMHn5vkc
+
+# Unified Telegram Bot (единый бот для всех компаний)
+TELEGRAM_BOT_TOKEN=8002982567:AAHUinx3gTyIXCw1sFzVLIf78jvXJj1m8IM
+
+# Admin Telegram Bot (опционально, для админских уведомлений)
+ADMIN_TELEGRAM_BOT_TOKEN=8260305501:AAH5pKpgUcuU6XUzV0yZ4JYjeWaNtMccJYc
+ADMIN_TELEGRAM_CHAT_ID=7737197594
+
+# Frontend URL (замените на ваш Railway URL после деплоя)
+# Формат: https://your-app-name.up.railway.app
+FRONTEND_URL=https://your-app-name.up.railway.app
+
+# Cron Schedule (каждые 5 минут)
+REVIEW_CHECK_SCHEDULE=*/5 * * * *
+
+# Google Sheets (отключено)
+GOOGLE_SHEETS_ENABLED=false
+
+# ============================================================
+# ВАЖНО: После первого деплоя
+# ============================================================
+# 1. Railway даст вам URL вида: https://xxxxxxx.up.railway.app
+# 2. Обновите переменную FRONTEND_URL на этот URL
+# 3. Настройте webhook для Telegram бота (см. инструкцию ниже)
+# ============================================================
