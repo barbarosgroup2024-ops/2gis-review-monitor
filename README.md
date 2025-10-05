@@ -6,15 +6,26 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 [![React Version](https://img.shields.io/badge/react-18.2.0-blue)](https://reactjs.org/)
 [![Deploy on Railway](https://img.shields.io/badge/Deploy%20on-Railway-blueviolet)](https://railway.app)
+[![Deploy on Render](https://img.shields.io/badge/Deploy%20on-Render-46E3B7)](https://render.com)
 
 ## 🚀 Быстрый старт
 
-**Деплой на Railway за 5 минут:**
+### Вариант 1: Деплой на Render.com (Рекомендуется) ⭐
 
-1. Нажмите кнопку ниже или следуйте инструкции в [QUICK_DEPLOY.md](./QUICK_DEPLOY.md)
-2. Добавьте переменные окружения из [RAILWAY_ENV.txt](./RAILWAY_ENV.txt)
+**Бесплатно, просто, быстро:**
+
+1. Следуйте инструкции в [QUICK_START_RENDER.md](./QUICK_START_RENDER.md)
+2. Добавьте переменные окружения из [RENDER_ENV.txt](./RENDER_ENV.txt)
 3. Настройте Telegram webhook
 4. Готово! 🎉
+
+📋 **Полная инструкция:** [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md)
+
+### Вариант 2: Деплой на Railway
+
+1. Следуйте инструкции в [QUICK_DEPLOY.md](./QUICK_DEPLOY.md)
+2. Добавьте переменные окружения из [RAILWAY_ENV.txt](./RAILWAY_ENV.txt)
+3. Настройте Telegram webhook
 
 📋 **Полная инструкция:** [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md)
 
