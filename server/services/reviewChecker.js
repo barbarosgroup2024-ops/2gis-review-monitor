@@ -1,13 +1,13 @@
 const googleSheetsService = require('./googleSheets');
 const twoGisService = require('./twoGis');
 const telegramService = require('./telegram');
-const supabase = require('./supabase');
+const supabaseService = require('./supabase');
 
 // Проверка отзывов для всех активных компаний
 async function checkAllCompanies() {
   try {
     // Получаем компании из Supabase (новая система с единым ботом)
-    const { data: supabaseCompanies, error } = await supabase
+    const { data: supabaseCompanies, error } = await supabaseService.supabase
       .from('companies')
       .select('*')
       .eq('active', true)
@@ -136,7 +136,7 @@ async function checkCompanyReviews(company) {
       }
 
       // Обновляем время последней проверки
-      await supabase
+      await supabaseService.supabase
         .from('companies')
         .update({ last_check_at: new Date().toISOString() })
         .eq('id', company.id);

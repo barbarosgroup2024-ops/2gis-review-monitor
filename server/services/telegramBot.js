@@ -1,14 +1,28 @@
 const TelegramBot = require('node-telegram-bot-api');
-const supabase = require('./supabase');
+const supabaseService = require('./supabase');
+
+// Проверяем, нужно ли запускать бота
+const ENABLE_TELEGRAM_BOT = process.env.ENABLE_TELEGRAM_BOT !== 'false';
+
+if (!process.env.TELEGRAM_BOT_TOKEN) {
+  console.warn('⚠️ TELEGRAM_BOT_TOKEN не настроен. Telegram бот отключен.');
+}
 
 // Инициализация бота
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+const bot = process.env.TELEGRAM_BOT_TOKEN && ENABLE_TELEGRAM_BOT
+  ? new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true })
+  : null;
 
-console.log('🤖 Telegram бот запущен и ожидает команд...');
+if (bot) {
+  console.log('🤖 Telegram бот запущен и ожидает команд...');
+} else {
+  console.log('⏸ Telegram бот отключен (ENABLE_TELEGRAM_BOT=false или токен не настроен)');
+}
 
 // ============================================================
 // Обработчик команды /start CODE
 // ============================================================
+if (bot) {
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   const chatId = msg.chat.id;
   const userId = msg.from.id;
@@ -31,7 +45,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
 
   try {
     // Ищем компанию по коду активации
-    const { data: companyData, error } = await supabase
+    const { data: companyData, error } = await supabaseService.supabase
       .from('companies')
       .select('*')
       .eq('telegram_activation_code', activationCode)
@@ -64,7 +78,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
 
     // Активируем бота
     console.log(`🔄 Активация бота для компании ${companyData.id}...`);
-    const { error: updateError } = await supabase
+    const { error: updateError } = await supabaseService.supabase
       .from('companies')
       .update({
         telegram_activated: true,
@@ -111,17 +125,19 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
     );
   }
 });
+}
 
 // ============================================================
 // Обработчик команды /status
 // ============================================================
+if (bot) {
 bot.onText(/\/status/, async (msg) => {
   const chatId = msg.chat.id;
   const userId = msg.from.id;
 
   try {
     // Ищем компанию пользователя
-    const { data: companies, error } = await supabase
+    const { data: companies, error } = await supabaseService.supabase
       .from('companies')
       .select('*')
       .eq('telegram_user_id', userId.toString())
@@ -169,17 +185,19 @@ bot.onText(/\/status/, async (msg) => {
     );
   }
 });
+}
 
 // ============================================================
 // Обработчик команды /stop
 // ============================================================
+if (bot) {
 bot.onText(/\/stop/, async (msg) => {
   const chatId = msg.chat.id;
   const userId = msg.from.id;
 
   try {
     // Отключаем уведомления для всех компаний пользователя
-    const { error } = await supabase
+    const { error } = await supabaseService.supabase
       .from('companies')
       .update({ telegram_notifications_enabled: false })
       .eq('telegram_user_id', userId.toString())
@@ -206,10 +224,12 @@ bot.onText(/\/stop/, async (msg) => {
     );
   }
 });
+}
 
 // ============================================================
 // Обработчик команды /help
 // ============================================================
+if (bot) {
 bot.onText(/\/help/, async (msg) => {
   const chatId = msg.chat.id;
 
@@ -240,10 +260,12 @@ bot.onText(/\/help/, async (msg) => {
 
   await bot.sendMessage(chatId, helpMessage, { parse_mode: 'HTML' });
 });
+}
 
 // ============================================================
 // Обработчик неизвестных команд
 // ============================================================
+if (bot) {
 bot.on('message', async (msg) => {
   // Игнорируем команды (они обрабатываются выше)
   if (msg.text && msg.text.startsWith('/')) {
@@ -263,11 +285,17 @@ bot.on('message', async (msg) => {
     { parse_mode: 'HTML' }
   );
 });
+}
 
 // ============================================================
 // Функция отправки уведомления о новом отзыве
 // ============================================================
 async function sendReviewNotification(telegramUserId, review, companyName) {
+  if (!bot) {
+    console.warn('⚠️ Telegram бот отключен, уведомление не отправлено');
+    return { success: false, error: 'Bot is disabled' };
+  }
+
   try {
     const stars = '⭐'.repeat(review.rating);
     const date = review.date ? new Date(review.date).toLocaleString('ru-RU') : 'Не указана';
@@ -299,9 +327,11 @@ ${review.text || 'Без текста'}
 // ============================================================
 // Обработка ошибок polling
 // ============================================================
+if (bot) {
 bot.on('polling_error', (error) => {
   console.error('Telegram polling error:', error.code, error.message);
 });
+}
 
 // ============================================================
 // Экспорт
